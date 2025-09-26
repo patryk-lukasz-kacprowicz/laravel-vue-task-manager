@@ -51,6 +51,11 @@ const updateTaskStatus = async () => {
                     type: 'error'
                 }
             }
+        } else {
+            statusMessage.value = {
+                message: 'Unable to connect to the server. Please try again later.',
+                type: 'error'
+            };
         }
     }
 }
