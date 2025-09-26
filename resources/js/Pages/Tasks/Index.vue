@@ -63,7 +63,7 @@ import {Head, router} from "@inertiajs/vue3";
                                 <td class="py-4 px-6 text-center">{{ truncateText(task.description, 50) }}</td>
                                 <td class="py-4 px-6 text-center space-x-2">
                                     <a :href="route('tasks.show', task.id)" class="bg-blue-600 p-2 rounded text-gray-200 font-bold hover:bg-blue-700 transition">View</a>
-                                    <button class="bg-orange-600 p-2 rounded text-gray-200 font-bold hover:bg-orange-700 transition">Edit</button>
+                                    <a :href="route('tasks.edit', task.id)" class="bg-orange-600 p-2 rounded text-gray-200 font-bold hover:bg-orange-700 transition">Edit</a>
                                     <button class="bg-red-800 p-2 rounded text-gray-200 font-bold hover:bg-red-900 transition">Delete</button>
                                 </td>
                             </tr>
