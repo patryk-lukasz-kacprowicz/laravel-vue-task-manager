@@ -1,6 +1,7 @@
 <script setup>
 import {Head, router} from "@inertiajs/vue3";
 import {ref} from "vue";
+import Navbar from "@/Components/Custom/Navbar.vue";
 
 const props = defineProps({
     task: {
@@ -68,6 +69,8 @@ const submitForm = async () => {
 
 <template>
     <Head title="TODOapp - Edit a task" />
+
+    <Navbar />
 
     <div class="dark-bg">
         <div class="bg-black bg-opacity-85 flex-grow">
