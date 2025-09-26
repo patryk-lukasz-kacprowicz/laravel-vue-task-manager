@@ -22,7 +22,7 @@ const submitForm = async () => {
         const response = await axios.post(route('tasks.store'), payload)
 
         statusMessage.value = {
-            message: response.data.message || 'Task status successfully updated!',
+            message: response.data.message || 'Task successfully created!',
             type: 'success'
         }
 
