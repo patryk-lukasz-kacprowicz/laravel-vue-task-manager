@@ -87,7 +87,7 @@ class TaskController extends Controller
      * @return Response
      */
     public function edit(Task $task): Response {
-        return Inertia::render('Tasks/Show', [
+        return Inertia::render('Tasks/Edit', [
             'task' => TaskResource::make($task),
         ]);
     }
