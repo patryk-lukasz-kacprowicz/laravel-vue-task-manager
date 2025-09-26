@@ -9,6 +9,7 @@ const form = ref({
     is_completed: null,
     title: '',
     description: '',
+    deadline_date: '',
 });
 
 const submitForm = async () => {
@@ -94,6 +95,12 @@ const submitForm = async () => {
                                     <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Task description</label>
                                     <textarea id="description" v-model="form.description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Application must be well made!" required />
                                     <p v-if="validationErrors.description" class="mt-2 text-sm text-red-500">{{ validationErrors.description }}</p>
+                                </div>
+
+                                <div>
+                                    <label for="deadline_date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Deadline date</label>
+                                    <input type="date" id="deadline_date" v-model="form.deadline_date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                    <p v-if="validationErrors.deadline_date" class="mt-2 text-sm text-red-500">{{ validationErrors.deadline_date }}</p>
                                 </div>
 
                                 <div class="flex items-start mb-6">
