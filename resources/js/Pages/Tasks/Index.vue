@@ -1,6 +1,6 @@
 <script setup>
-import {Head, router} from "@inertiajs/vue3";
-    import {render} from "@vue/runtime-dom";
+    import {Head, router} from "@inertiajs/vue3";
+    import {ref} from "vue";
 
     const props = defineProps({
         tasks: {
@@ -30,6 +30,49 @@ import {Head, router} from "@inertiajs/vue3";
 
         return svgIcons.times
     }
+
+    const statusMessage = ref({ message: '', type: '' });
+
+    const deleteTask = async (task) => {
+        try {
+            const response = await axios.delete(route('tasks.update', task.id))
+
+            statusMessage.value = {
+                message: response.data.message || 'Task successfully deleted!',
+                type: 'success'
+            }
+
+            window.location.reload()
+        } catch (error) {
+            if (error.response) {
+                const responseData = error.response.data;
+
+                if (error.response.status === 422 && responseData && responseData.errors) {
+                    validationErrors.value = responseData.errors
+
+                    statusMessage.value = {
+                        message: responseData.message || 'There were validation errors. Please check form.',
+                        type: 'error'
+                    }
+                } else if (responseData && responseData.message) {
+                    statusMessage.value = {
+                        message: responseData.message,
+                        type: 'error'
+                    }
+                } else {
+                    statusMessage.value = {
+                        message: `A server error has occurred. Error code: ${error.response.status}`,
+                        type: 'error'
+                    }
+                }
+            } else {
+                statusMessage.value = {
+                    message: 'Unable to connect to the server. Please try again later.',
+                    type: 'error'
+                };
+            }
+        }
+    }
 </script>
 
 <template>
@@ -44,6 +87,16 @@ import {Head, router} from "@inertiajs/vue3";
                     </h3>
                 </div>
                 <div class="p-6 bg-neutral-900 rounded-lg shadow-md mt-4 mb-2">
+                    <div class="mb-3" v-if="statusMessage.message">
+                        <div v-if="statusMessage.message" class="mt-4 p-4 rounded" :class="{
+                            'bg-green-500 text-white': statusMessage.type === 'success',
+                            'bg-red-500 text-white': statusMessage.type === 'error',
+                            'bg-blue-500 text-white': statusMessage.type === 'info',
+                        }">
+                            {{ statusMessage.message }}
+                        </div>
+                    </div>
+
                     <div class="space-y-2">
                         <table class="w-full text-sm text-left test-gray-400">
                             <thead class="text-xs text-gray-200 uppercase bg-neutral-900">
@@ -64,7 +117,7 @@ import {Head, router} from "@inertiajs/vue3";
                                 <td class="py-4 px-6 text-center space-x-2">
                                     <a :href="route('tasks.show', task.id)" class="bg-blue-600 p-2 rounded text-gray-200 font-bold hover:bg-blue-700 transition">View</a>
                                     <a :href="route('tasks.edit', task.id)" class="bg-orange-600 p-2 rounded text-gray-200 font-bold hover:bg-orange-700 transition">Edit</a>
-                                    <button class="bg-red-800 p-2 rounded text-gray-200 font-bold hover:bg-red-900 transition">Delete</button>
+                                    <button @click="deleteTask(task)" class="bg-red-800 p-2 rounded text-gray-200 font-bold hover:bg-red-900 transition">Delete</button>
                                 </td>
                             </tr>
                             </tbody>
