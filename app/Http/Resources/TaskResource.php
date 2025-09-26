@@ -21,8 +21,8 @@ class TaskResource extends JsonResource
             'description' => $this->description,
             'deadline_date' => ($this->deadline_date) ? $this->deadline_date->format('Y-m-d') : null,
             'completion_date' => ($this->completion_date) ? $this->completion_date->format('Y-m-d') : null,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => $this->created_at->format('Y-m-d'),
+            'updated_at' => ($this->updated_at) ? $this->updated_at->format('Y-m-d') : null,
         ];
     }
 }
