@@ -15,6 +15,9 @@ class TaskService
      */
     public function store(array $data): bool {
         try {
+            $data['completion_date'] = $data['is_completed'] ? now() : null;
+            $data['deadline_date'] ??= now()->endOfDay();
+
             Task::query()->create($data);
 
             return true;
@@ -33,6 +36,9 @@ class TaskService
      */
     public function update(array $data, Task $task): bool {
         try {
+            $data['completion_date'] = $data['is_completed'] ? now() : null;
+            $data['deadline_date'] ??= now()->endOfDay();
+
             $task->update($data);
 
             return true;

@@ -25,6 +25,7 @@ class TaskRequest extends FormRequest
             'is_completed' => ['nullable', 'boolean'],
             'title' => ['nullable', 'string', 'max:255', 'min:1'],
             'description' => ['nullable', 'string'],
+            'deadline_date' => ['nullable', 'date'],
         ];
     }
 }
