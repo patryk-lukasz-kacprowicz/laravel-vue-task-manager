@@ -110,6 +110,8 @@
                                 <th scope="col" class="py-3 px-6 text-center">Completed?</th>
                                 <th scope="col" class="py-3 px-6 text-center">Title</th>
                                 <th scope="col" class="py-3 px-6 text-center">Short description</th>
+                                <th scope="col" class="py-3 px-6 text-center">Deadline date</th>
+                                <th scope="col" class="py-3 px-6 text-center">Completion date</th>
                                 <th scope="col" class="py-3 px-6 text-center">Actions</th>
                             </tr>
                             </thead>
@@ -119,6 +121,8 @@
                                 <td class="py-4 px-6 text-center" v-html="renderIcon(task.is_completed)"></td>
                                 <td class="py-4 px-6 text-center">{{ task.title }}</td>
                                 <td class="py-4 px-6 text-center">{{ truncateText(task.description, 50) }}</td>
+                                <td class="py-4 px-6 text-center">{{ task.deadline_date }}</td>
+                                <td class="py-4 px-6 text-center">{{ task.completion_date }}</td>
                                 <td class="py-4 px-6 text-center space-x-2">
                                     <a :href="route('tasks.show', task.id)" class="bg-blue-600 p-2 rounded text-gray-200 font-bold hover:bg-blue-700 transition">View</a>
                                     <a :href="route('tasks.edit', task.id)" class="bg-orange-600 p-2 rounded text-gray-200 font-bold hover:bg-orange-700 transition">Edit</a>
