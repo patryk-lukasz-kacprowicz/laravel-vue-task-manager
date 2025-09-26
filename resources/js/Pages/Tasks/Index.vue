@@ -85,6 +85,11 @@
                     <h3 class="text-3xl font-bold text-gray-200">
                         TODO list
                     </h3>
+                    <div class="mt-1">
+                        <a
+                            :href="route('tasks.create')"
+                            class="p-2 text-white bg-blue-800 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create task</a>
+                    </div>
                 </div>
                 <div class="p-6 bg-neutral-900 rounded-lg shadow-md mt-4 mb-2">
                     <div class="mb-3" v-if="statusMessage.message">
