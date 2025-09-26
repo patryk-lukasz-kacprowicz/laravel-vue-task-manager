@@ -1,6 +1,7 @@
 <script setup>
 import {Head} from "@inertiajs/vue3";
 import {ref} from "vue";
+import Navbar from "@/Components/Custom/Navbar.vue";
 
 const props = defineProps({
     task: {
@@ -63,6 +64,8 @@ const updateTaskStatus = async () => {
 
 <template>
     <Head title="TODOapp - Show task details" />
+
+    <Navbar />
 
     <div class="dark-bg">
         <div class="bg-black bg-opacity-85 flex-grow">
