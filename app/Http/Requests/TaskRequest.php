@@ -23,7 +23,7 @@ class TaskRequest extends FormRequest
     {
         return [
             'is_completed' => ['nullable', 'boolean'],
-            'title' => ['required', 'string', 'max:255', 'min:1'],
+            'title' => ['nullable', 'string', 'max:255', 'min:1'],
             'description' => ['nullable', 'string'],
         ];
     }
