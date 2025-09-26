@@ -2,6 +2,7 @@
 import {Head} from "@inertiajs/vue3";
 import {ref} from "vue";
 import Navbar from "@/Components/Custom/Navbar.vue";
+import { priorityToString } from "@/utilities/taskHelper.js";
 
 const props = defineProps({
     task: {
@@ -115,6 +116,11 @@ const updateTaskStatus = async () => {
                                 <div>
                                     <h4 class="text-sm font-semibold text-gray-400 uppercase mb-1">Deadline Date</h4>
                                     <p class="text-base text-gray-200 font-medium">{{ task.deadline_date || 'N/A' }}</p>
+                                </div>
+
+                                <div>
+                                    <h4 class="text-sm font-semibold text-gray-400 uppercase mb-1">Priority</h4>
+                                    <p class="text-base text-gray-200 font-medium">{{ priorityToString(task.priority) }}</p>
                                 </div>
 
                                 <div>

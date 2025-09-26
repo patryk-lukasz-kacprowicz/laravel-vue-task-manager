@@ -2,6 +2,7 @@
     import {Head, router} from "@inertiajs/vue3";
     import {ref} from "vue";
     import Navbar from "@/Components/Custom/Navbar.vue";
+    import {priorityToString} from "../../utilities/taskHelper.js";
 
     const props = defineProps({
         tasks: {
@@ -113,6 +114,7 @@
                         <tr>
                             <th scope="col" class="py-3 px-6">#</th>
                             <th scope="col" class="py-3 px-6 text-center">Completed?</th>
+                            <th scope="col" class="py-3 px-6 text-center">Priority</th>
                             <th scope="col" class="py-3 px-6">Title</th>
                             <th scope="col" class="py-3 px-6">Short description</th>
                             <th scope="col" class="py-3 px-6 text-center">Deadline date</th>
@@ -124,6 +126,13 @@
                         <tr v-for="task in tasks" :key="task.id" class="bg-neutral-800 border-b text-gray-200 border-neutral-800 hover:bg-neutral-700 transition duration-150">
                             <td class="py-4 px-6 font-medium text-white whitespace-nowrap">{{ task.id }}</td>
                             <td class="py-4 px-6 text-center" v-html="renderIcon(task.is_completed)"></td>
+                            <td class="py-4 px-6 text-center">
+                                <span class="p-1 rounded-lg uppercase font-bold" :class="{
+                                    'bg-red-500' : task.priority === 1,
+                                    'bg-orange-500' : task.priority === 2,
+                                    'bg-green-500' : task.priority > 2
+                                }">{{ priorityToString(task.priority) }}</span>
+                            </td>
                             <td class="py-4 px-6">{{ task.title }}</td>
                             <td class="py-4 px-6">{{ truncateText(task.description, 50) }}</td>
                             <td class="py-4 px-6 text-center">{{ task.deadline_date }}</td>

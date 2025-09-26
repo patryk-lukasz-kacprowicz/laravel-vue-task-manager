@@ -11,6 +11,7 @@ const form = ref({
     title: '',
     description: '',
     deadline_date: '',
+    priority: null,
 });
 
 const submitForm = async () => {
@@ -106,6 +107,12 @@ const submitForm = async () => {
                                     <label for="deadline_date" class="block mb-2 text-sm font-medium text-gray-200">Deadline date</label>
                                     <input type="date" id="deadline_date" v-model="form.deadline_date" class="form-input block w-full bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 rounded-lg" />
                                     <p v-if="validationErrors.deadline_date" class="mt-2 text-sm text-red-500">{{ validationErrors.deadline_date }}</p>
+                                </div>
+
+                                <div>
+                                    <label for="priority" class="block mb-2 text-sm font-medium text-gray-200">Priority (1-High, 3-Low)</label>
+                                    <input type="number" id="priority" v-model="form.priority" min="1" max="3" class="form-input block w-full bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500 rounded-lg" placeholder="2" />
+                                    <p v-if="validationErrors.priority" class="mt-2 text-sm text-red-500">{{ validationErrors.priority }}</p>
                                 </div>
 
                             </div>
