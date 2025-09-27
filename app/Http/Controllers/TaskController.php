@@ -26,13 +26,26 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
+     *
      * @return Response
      */
-    public function index(): Response {
+    public function index(Request $request): Response {
+        $filters = $request->only(['status', 'priority', 'sort_column', 'sort_direction']);
+
+        $sortColumn = $filters['sort_column'] ?? 'created_at';
+        $sortDirection = $filters['sort_direction'] ?? 'desc';
+
+        $tasks = Task::query()
+            ->where('user_id', auth()->id())
+            ->filterByStatus($filters['status'] ?? null)
+            ->filterByPriority($filters['priority'] ?? null)
+            ->applySort($sortColumn, $sortDirection)
+            ->get();
+
         return Inertia::render('Tasks/Index', [
-            'tasks' => TaskResource::collection(
-                Task::query()->where('user_id', auth()->id())->latest()->get()
-            ),
+            'tasks' => TaskResource::collection($tasks),
+            'filters' => $filters,
         ]);
     }
 

@@ -1,17 +1,23 @@
 <script setup>
     import {Head, router} from "@inertiajs/vue3";
-    import {ref} from "vue";
+    import {computed, ref} from "vue";
     import Navbar from "@/Components/Custom/Navbar.vue";
     import { priorityToString } from "@/utilities/taskHelper.js";
 
     const props = defineProps({
         tasks: {
-            type: Array,
+            type: Object,
             required: true,
-            default: () => [],
+            default: () => ({ data: [] }),
         },
+        filters: {
+            type: Object,
+            required: false,
+            default: () => ({})
+        }
     })
-    const tasks = props.tasks.data
+
+    const tasksData = computed(() => props.tasks.data || []);
 
     const truncateText = (text, maxLength) => {
         if (text && text.length > maxLength) {
@@ -75,6 +81,53 @@
             }
         }
     }
+
+    const filters = ref({
+        status: props.filters.status || '',
+        priority: props.filters.priority || ''
+    })
+
+    const sorting = ref({
+        column: props.filters.sort_column || 'created_at',
+        direction: props.filters.sort_direction || 'desc',
+    })
+
+    const applyFilters = () => {
+        const params = {
+            status: filters.value.status,
+            priority: filters.value.priority,
+            sort_column: sorting.value.column,
+            sort_direction: sorting.value.direction,
+        }
+
+        Object.keys(params).forEach(key => {
+            if (params[key] === '' || params[key] === null || params[key] === undefined) {
+                delete params[key];
+            }
+        });
+
+        router.get(route('dashboard.tasks.index'), params, {
+            preserveState: true,
+            replace: true,
+        });
+    }
+
+    const applySort = () => {
+        applyFilters()
+    }
+
+    const resetFilters = () => {
+        filters.value.status = ''
+        filters.value.priority = ''
+
+        sorting.value.column = 'created_at'
+        sorting.value.direction = 'desc'
+
+        router.get(route('dashboard.tasks.index'), {}, {
+            preserveState: true,
+            replace: true,
+        })
+    }
 </script>
 
 <template>
@@ -108,6 +161,57 @@
                     </div>
                 </div>
 
+                <div class="p-4 bg-neutral-900 rounded-lg shadow-md mt-4 mb-6">
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-4 md:gap-6">
+
+                        <div>
+                            <label for="filter-status" class="block mb-2 text-sm font-medium text-gray-400">Filter by Status</label>
+                            <select id="filter-status" v-model="filters.status" @change="applyFilters"
+                                    class="w-full bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                                <option value="">All</option>
+                                <option value="0">Pending</option>
+                                <option value="1">Completed</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="filter-priority" class="block mb-2 text-sm font-medium text-gray-400">Filter by Priority</label>
+                            <select id="filter-priority" v-model="filters.priority" @change="applyFilters"
+                                    class="w-full bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                                <option value="">All</option>
+                                <option value="1">{{ priorityToString(1) }}</option>
+                                <option value="2">{{ priorityToString(2) }}</option>
+                                <option value="3">{{ priorityToString(3) }}</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="sort-by" class="block mb-2 text-sm font-medium text-gray-400">Sort By</label>
+                            <select id="sort-by" v-model="sorting.column" @change="applySort"
+                                    class="w-full bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                                <option value="created_at">Creation Date</option>
+                                <option value="deadline_date">Deadline Date</option>
+                                <option value="priority">Priority</option>
+                                <option value="title">Title</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="sort-direction" class="block mb-2 text-sm font-medium text-gray-400">Order</label>
+                            <select id="sort-direction" v-model="sorting.direction" @change="applySort"
+                                    class="w-full bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                                <option value="asc">Ascending (A-Z, Oldest)</option>
+                                <option value="desc">Descending (Z-A, Newest)</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="mt-4 flex justify-end">
+                        <button @click="resetFilters" class="text-sm text-gray-400 hover:text-white transition">Reset Filters</button>
+                    </div>
+                </div>
+
                 <div class="p-4 bg-neutral-900 rounded-lg shadow-md mt-4 mb-2 hidden md:block overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-400">
                         <thead class="text-xs text-gray-200 uppercase bg-neutral-900 border-b border-neutral-800">
@@ -123,7 +227,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="task in tasks" :key="task.id" class="bg-neutral-800 border-b text-gray-200 border-neutral-800 hover:bg-neutral-700 transition duration-150">
+                        <tr v-for="task in tasksData" :key="task.id" class="bg-neutral-800 border-b text-gray-200 border-neutral-800 hover:bg-neutral-700 transition duration-150">
                             <td class="py-4 px-6 font-medium text-white whitespace-nowrap">{{ task.id }}</td>
                             <td class="py-4 px-6 text-center" v-html="renderIcon(task.is_completed)"></td>
                             <td class="py-4 px-6 text-center">
@@ -148,7 +252,7 @@
                 </div>
 
                 <div class="md:hidden space-y-4 mt-4 mb-2">
-                    <div v-for="task in tasks" :key="task.id" class="bg-neutral-800 rounded-lg shadow-xl p-4 border-l-4" :class="task.is_completed ? 'border-green-500' : 'border-red-500'">
+                    <div v-for="task in tasksData" :key="task.id" class="bg-neutral-800 rounded-lg shadow-xl p-4 border-l-4" :class="task.is_completed ? 'border-green-500' : 'border-red-500'">
                         <div class="flex justify-between items-start border-b border-neutral-700 pb-2 mb-2">
                             <h4 class="text-xl font-semibold text-white truncate pr-2">{{ task.title }}</h4>
                             <span class="text-sm font-medium text-gray-400">#{{ task.id }}</span>
@@ -168,7 +272,7 @@
                         </div>
                     </div>
 
-                    <div v-if="tasks.length === 0" class="text-center p-4 text-gray-400">Brak zadań do wyświetlenia.</div>
+                    <div v-if="tasksData.length === 0" class="text-center p-4 text-gray-400">Brak zadań do wyświetlenia.</div>
                 </div>
             </div>
         </div>
