@@ -30,7 +30,7 @@ const submitForm = async () => {
             is_completed: form.value.is_completed ? true : false
         }
 
-        const response = await axios.patch(route('tasks.update', task.id), payload)
+        const response = await axios.patch(route('dashboard.tasks.update', task.id), payload)
 
         statusMessage.value = {
             message: response.data.message || 'Task successfully updated!',
