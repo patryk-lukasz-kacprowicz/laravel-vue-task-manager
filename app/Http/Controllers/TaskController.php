@@ -30,7 +30,9 @@ class TaskController extends Controller
      */
     public function index(): Response {
         return Inertia::render('Tasks/Index', [
-            'tasks' => TaskResource::collection(Task::all()),
+            'tasks' => TaskResource::collection(
+                Task::query()->where('user_id', auth()->id())->latest()->get()
+            ),
         ]);
     }
 
@@ -74,6 +76,8 @@ class TaskController extends Controller
      * @return Response
      */
     public function show(Task $task): Response {
+        $this->authorize('view', $task);
+
         return Inertia::render('Tasks/Show', [
             'task' => TaskResource::make($task),
         ]);
@@ -87,6 +91,8 @@ class TaskController extends Controller
      * @return Response
      */
     public function edit(Task $task): Response {
+        $this->authorize('view', $task);
+
         return Inertia::render('Tasks/Edit', [
             'task' => TaskResource::make($task),
         ]);
@@ -101,6 +107,8 @@ class TaskController extends Controller
      * @return JsonResponse
      */
     public function update(TaskRequest $request, Task $task): JsonResponse {
+        $this->authorize('update', $task);
+
         $result = $this->taskService->update($request->validated(), $task);
 
         if ($result) {
@@ -124,6 +132,8 @@ class TaskController extends Controller
      * @return JsonResponse
      */
     public function destroy(Task $task): JsonResponse {
+        $this->authorize('delete', $task);
+
         $result = $this->taskService->destroy($task);
 
         if ($result) {

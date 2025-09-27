@@ -17,6 +17,7 @@ class TaskService
         try {
             $data['completion_date'] = $data['is_completed'] ? now() : null;
             $data['deadline_date'] ??= now()->endOfDay();
+            $data['user_id'] = auth()->id();
 
             Task::query()->create($data);
 

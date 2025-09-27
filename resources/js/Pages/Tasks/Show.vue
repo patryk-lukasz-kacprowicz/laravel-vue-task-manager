@@ -23,7 +23,7 @@ const updateTaskStatus = async () => {
             is_completed: !task.is_completed
         }
 
-        const response = await axios.patch(route('tasks.update', task.id), payload);
+        const response = await axios.patch(route('dashboard.tasks.update', task.id), payload);
 
         statusMessage.value = {
             message: response.data.message || 'Task status successfully updated!',

@@ -1,23 +1,17 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
+use App\Http\Resources\TaskResource;
+use App\Models\Task;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
-
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    return Inertia::render('Welcome', []);
+})->name('welcome');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -27,10 +21,10 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('tasks', [TaskController::class, 'index'])->name('tasks.index');
-Route::get('tasks/create', [TaskController::class, 'create'])->name('tasks.create');
-Route::post('tasks', [TaskController::class, 'store'])->name('tasks.store');
-Route::get('tasks/{task}', [TaskController::class, 'show'])->name('tasks.show');
-Route::get('tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
-Route::patch('tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
-Route::delete('tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+Route::prefix('dashboard')->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::name('dashboard.')->group(function () {
+        Route::resource('tasks', TaskController::class);
+    });
+});

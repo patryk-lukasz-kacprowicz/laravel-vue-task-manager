@@ -22,7 +22,7 @@ const submitForm = async () => {
             is_completed: form.value.is_completed ? true : false
         }
 
-        const response = await axios.post(route('tasks.store'), payload)
+        const response = await axios.post(route('dashboard.tasks.store'), payload)
 
         statusMessage.value = {
             message: response.data.message || 'Task successfully created!',

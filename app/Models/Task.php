@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
     /** @var array<string>  */
     protected $fillable = [
+        'user_id',
         'is_completed',
         'title',
         'description',
@@ -22,4 +24,11 @@ class Task extends Model
         'deadline_date' => 'datetime',
         'completion_date' => 'datetime',
     ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class);
+    }
 }

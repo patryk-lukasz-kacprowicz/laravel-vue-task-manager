@@ -2,7 +2,7 @@
     import {Head, router} from "@inertiajs/vue3";
     import {ref} from "vue";
     import Navbar from "@/Components/Custom/Navbar.vue";
-    import {priorityToString} from "../../utilities/taskHelper.js";
+    import { priorityToString } from "@/utilities/taskHelper.js";
 
     const props = defineProps({
         tasks: {
@@ -37,7 +37,7 @@
 
     const deleteTask = async (task) => {
         try {
-            const response = await axios.delete(route('tasks.update', task.id))
+            const response = await axios.delete(route('dashboard.tasks.destroy', task.id))
 
             statusMessage.value = {
                 message: response.data.message || 'Task successfully deleted!',
@@ -91,7 +91,7 @@
                     </h3>
                     <div>
                         <a
-                            :href="route('tasks.create')"
+                            :href="route('dashboard.tasks.create')"
                             class="p-2 text-white bg-blue-800 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition duration-150 ease-in-out">
                             Create task
                         </a>
@@ -138,8 +138,8 @@
                             <td class="py-4 px-6 text-center">{{ task.deadline_date }}</td>
                             <td class="py-4 px-6 text-center">{{ task.completion_date }}</td>
                             <td class="py-4 px-6 text-center space-x-2 whitespace-nowrap">
-                                <a :href="route('tasks.show', task.id)" class="bg-blue-600 p-2 rounded text-gray-200 font-bold hover:bg-blue-700 transition">View</a>
-                                <a :href="route('tasks.edit', task.id)" class="bg-orange-600 p-2 rounded text-gray-200 font-bold hover:bg-orange-700 transition">Edit</a>
+                                <a :href="route('dashboard.tasks.show', task.id)" class="bg-blue-600 p-2 rounded text-gray-200 font-bold hover:bg-blue-700 transition">View</a>
+                                <a :href="route('dashboard.tasks.edit', task.id)" class="bg-orange-600 p-2 rounded text-gray-200 font-bold hover:bg-orange-700 transition">Edit</a>
                                 <button @click="deleteTask(task)" class="bg-red-800 p-2 rounded text-gray-200 font-bold hover:bg-red-900 transition">Delete</button>
                             </td>
                         </tr>
@@ -162,8 +162,8 @@
                         </div>
 
                         <div class="mt-4 flex flex-wrap gap-2 justify-center">
-                            <a :href="route('tasks.show', task.id)" class="flex-1 min-w-[80px] text-center bg-blue-600 py-2 px-3 rounded text-sm text-gray-200 font-bold hover:bg-blue-700 transition">View</a>
-                            <a :href="route('tasks.edit', task.id)" class="flex-1 min-w-[80px] text-center bg-orange-600 py-2 px-3 rounded text-sm text-gray-200 font-bold hover:bg-orange-700 transition">Edit</a>
+                            <a :href="route('dashboard.tasks.show', task.id)" class="flex-1 min-w-[80px] text-center bg-blue-600 py-2 px-3 rounded text-sm text-gray-200 font-bold hover:bg-blue-700 transition">View</a>
+                            <a :href="route('dashboard.tasks.edit', task.id)" class="flex-1 min-w-[80px] text-center bg-orange-600 py-2 px-3 rounded text-sm text-gray-200 font-bold hover:bg-orange-700 transition">Edit</a>
                             <button @click="deleteTask(task)" class="flex-1 min-w-[80px] text-center bg-red-800 py-2 px-3 rounded text-sm text-gray-200 font-bold hover:bg-red-900 transition">Delete</button>
                         </div>
                     </div>
